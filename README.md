@@ -68,7 +68,7 @@ graph TD
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/hitarth8705/ResearchAgent.git
    cd Langgraph
    ```
 
