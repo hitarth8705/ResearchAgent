@@ -2,6 +2,7 @@ langgraph
 langchain-google-genai
 tavily-python
 streamlit
-langchain-chroma
+langchain-pinecone
+pinecone
 python-dotenv
 grandalf

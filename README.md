@@ -9,7 +9,7 @@ An autonomous, multi-agent research pipeline powered by **LangGraph** and **Goog
 ## 🌟 Key Features
 
 - **Multi-Agent Orchestration**: A sophisticated graph-based workflow involving specialized nodes for Analysis, Search, Summarization, Research, Critique, and Revision.
-- **Intelligent Search Cache**: Uses **ChromaDB** to cache previous search results, reducing latency and API costs for redundant queries.
+- **Intelligent Search Cache**: Uses **Pinecone** to cache previous search results, reducing latency and API costs for redundant queries.
 - **Iterative Refinement**: A "Critique & Revise" loop ensures the final report meets high quality and accuracy standards.
 - **Citation Tracking**: Automatically collects and formats sources to ensure all claims are backed by verifiable data.
 - **Real-time Performance Metrics**: Tracks LLM calls, token usage, and estimated costs in real-time.
@@ -39,7 +39,7 @@ graph TD
 
 ### Node Breakdown:
 - **Analyzer**: Rewrites the query and decomposes it into 3 sub-queries.
-- **Cache Check**: Performs a semantic search in ChromaDB to find existing summaries.
+- **Cache Check**: Performs a semantic search in Pinecone to find existing summaries.
 - **Search**: Executes advanced web searches via **Tavily**.
 - **Summarizer**: Condenses raw web data into a dense context.
 - **Research Agent**: Drafts the initial report based on gathered context.
@@ -52,7 +52,7 @@ graph TD
 - **Orchestration**: [LangGraph](https://github.com/langchain-ai/langgraph)
 - **LLM**: [Google Gemini 2.5 Flash Lite](https://ai.google.dev/)
 - **Search**: [Tavily API](https://tavily.com/)
-- **Vector Database**: [ChromaDB](https://www.trychroma.com/)
+- **Vector Database**: [Pinecone](https://www.pinecone.io/)
 - **Frontend**: [Streamlit](https://streamlit.io/)
 - **Environment**: [Dotenv](https://github.com/theskumar/python-dotenv)
 
@@ -113,14 +113,14 @@ python main.py
 │   └── __init__.py
 ├── agent_cache/          # Persisted ChromaDB data
 ├── main.py               # Streamlit UI & CLI entry point
-├── inspect_cache.py      # Utility to view entries in the ChromaDB cache
+├── inspect_cache.py      # Utility to view entries in the Pinecone cache
 ├── requirements.txt      # Project dependencies
 └── .env                  # API keys (not included in git)
 ```
 
 ## 🛠️ Utilities
 
-- **Cache Inspector**: Run `python inspect_cache.py` to view all cached research queries and their stored summaries in the local ChromaDB instance.
+- **Cache Inspector**: Run `python inspect_cache.py` to view all cached research queries and their stored summaries in Pinecone.
 
 ## 📜 License
 

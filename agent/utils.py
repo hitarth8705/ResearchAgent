@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -6,6 +7,15 @@ from langchain_core.callbacks import BaseCallbackHandler
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Configure logging format
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] [%(name)s] %(message)s",
+    datefmt="%H:%M:%S"
+)
+logger = logging.getLogger("ResearchAgent")
+
 
 class TokenTracker(BaseCallbackHandler):
     def __init__(self):
@@ -46,17 +56,25 @@ llm = ChatGoogleGenerativeAI(
 
 def _llm(system: str, user: str, agent: str = "Research Agent") -> str:
     """Invokes the LLM with retry logic for 429 errors."""
+    logger.info(f"🤖 [{agent}] Invoking Gemini LLM (prompt length: {len(user):,} chars)...")
+    start_t = time.time()
     for attempt in range(3):
         try:
             result = llm.invoke([
                 SystemMessage(content=system),
                 HumanMessage(content=user),
             ], config={"callbacks": [token_tracker]})
-            return result.content.strip()
+            elapsed = time.time() - start_t
+            content = result.content.strip() if hasattr(result, 'content') else ""
+            logger.info(f"✅ [{agent}] LLM response received in {elapsed:.2f}s (output length: {len(content):,} chars)")
+            return content
         except Exception as e:
+            logger.warning(f"⚠️ [{agent}] LLM attempt {attempt+1} failed: {e}")
             if "429" in str(e) and attempt < 2:
                 wait_time = (attempt + 1) * 5
+                logger.info(f"⏳ [{agent}] Retrying LLM in {wait_time}s due to rate limit (429)...")
                 time.sleep(wait_time)
             else:
                 raise e
     return ""
+
